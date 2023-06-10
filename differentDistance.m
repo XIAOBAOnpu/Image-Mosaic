@@ -93,7 +93,7 @@ end
 
 %=====================================
 % color matching 
- alpha = 0.5;
+ alpha = 0;
  for i=1:tilesDown
      for j=1:tilesAcross
         mosaic_euc {i,j}(:,:,1)= alpha.*double(array(i,j,1))+ ((1-alpha).*double(mosaic_euc{i,j}(:,:,1)));
@@ -119,8 +119,10 @@ end
 %Transform the mosaic cell array into the final 3D matrix that represents our image.
 mosaic_man = cell2mat(mosaic_man);
 imwrite(mosaic_man,'mosaic_man.png');
+
 mosaic_che = cell2mat(mosaic_che);
-imwrite(mosaic_man,'mosaic_che.png');
+imwrite(mosaic_che,'mosaic_che.png');
+
 mosaic_euc = cell2mat(mosaic_euc);
 imwrite(mosaic_euc,'mosaic_euc.png');
 disp(['Mosaic finished']);
