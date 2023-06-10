@@ -109,7 +109,7 @@ for i=1:tilesDown
     end
 end
 
-alpha08 = 0.5;
+alpha08 = 0.8;
 for i=1:tilesDown
     for j=1:tilesAcross
         mosaic08 {i,j}(:,:,1)= alpha08.*double(array(i,j,1))+ ((1-alpha08).*double(mosaic08{i,j}(:,:,1)));
