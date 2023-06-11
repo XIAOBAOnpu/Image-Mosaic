@@ -5,10 +5,22 @@ function image_output = mosaic_converter(tilesAcross,method,alpha)%method=1 with
 
 
 ;
-% tilesAcross=100;
-% method=1;
-% alpha=0;
+tilesAcross=100;
+alpha=0.2;
+method=1;
+tilesAcross
+tilesAcross
+tilesAcross
+
+tilesAcross=100;
+%method=1;
+alpha
+alpha
+alpha
 % 1. Read in a list of tiles 
+method
+method
+method
 directory='.\images';% location of the tiles
 list = dir(['.\images\' '/*.' 'png']);% create a structure that gets the info of the files in the dir
 n = size(list,1);
@@ -86,16 +98,27 @@ end
 % assembler
 %Piece together the mosaic by arranging the tiles in the correct positions in a cell array.
 
-if method==1%Without color corrolation
+if method==1%Without color 
+    
+    tileIndex = randi(500,177,100);
     for i=1:tilesDown
         for j=1:tilesAcross
             mosaic{i,j} = tiles{tileIndex(i,j)}; % Assign the values of the best-Match tile to the mosaic cell 
         end
     end
+    
+    for i=1:tilesDown
+        for j=1:tilesAcross
+            mosaic2{i,j}(:,:,1)= alpha.*double(array(i,j,1))+ ((1-alpha).*double(mosaic{i,j}(:,:,1)));
+            mosaic2{i,j}(:,:,2)= alpha.*double(array(i,j,2))+ ((1-alpha).*double(mosaic{i,j}(:,:,2)));
+            mosaic2{i,j}(:,:,3)= alpha.*double(array(i,j,3))+ ((1-alpha).*double(mosaic{i,j}(:,:,3)));
+        end
+    end
 end
 %=====================================
 %color matching
-if method == 2 || method == 3 || method == 4% i will send color matching as a parameter
+method = int32(method);
+if method == 2 
    % alpha = 0.6;
     for i = 1:tilesDown
         for j = 1:tilesAcross
@@ -114,7 +137,7 @@ if method == 2 || method == 3 || method == 4% i will send color matching as a pa
                 elseif method ==3
                     mTemp_man(k) = norm(abs(avg(k,:) - [r,g,b]), Inf); % Chebyshev distance
                 elseif method == 4 
-                    mTemp_man(k) =norm(abs(avg(k,:) - [r,g,b]));% compare the RGB values of each tiles with the cells values an store them
+                    mTemp_man(k) =norm(abs(avg(k,:) - [r,g,b]));% Euclidian Distance
                 end
                 
 %                 mTemp_che(k) = norm(abs(avg(k,:) - [r,g,b]), Inf); % Chebyshev distance
@@ -152,9 +175,9 @@ if method == 2 || method == 3 || method == 4% i will send color matching as a pa
 %      
      for i=1:tilesDown
          for j=1:tilesAcross
-            mosaic{i,j}(:,:,1)= alpha.*double(array(i,j,1))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,1)));
-            mosaic{i,j}(:,:,2)= alpha.*double(array(i,j,2))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,2)));
-            mosaic{i,j}(:,:,3)= alpha.*double(array(i,j,3))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,3)));
+            mosaic2{i,j}(:,:,1)= alpha.*double(array(i,j,1))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,1)));
+            mosaic2{i,j}(:,:,2)= alpha.*double(array(i,j,2))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,2)));
+            mosaic2{i,j}(:,:,3)= alpha.*double(array(i,j,3))+ ((1-alpha).*double(mosaic_man{i,j}(:,:,3)));
         end
      end
      
@@ -169,11 +192,11 @@ if method == 2 || method == 3 || method == 4% i will send color matching as a pa
 end
 %=====================================
 %Transform the mosaic cell array into the final 3D matrix that represents our image.
-mosaic2 = cell2mat(mosaic);
+mosaic2 = cell2mat(mosaic2);
 
 image_output=mosaic2;
-% imshow(mosaic2);
+ imshow(mosaic2);
 % imwrite(mosaic,'mosaic.png');
 
-end
+%end
 
